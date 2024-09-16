@@ -8,7 +8,7 @@
 </head>
 
 <body>
-  <p>Estamos creando tu usuario, por favor espera un momento.</p>
+  <p>Estamos creando tu usuario, por favor espera un segundo.</p>
 
   <?php
 
