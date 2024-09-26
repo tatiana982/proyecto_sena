@@ -27,7 +27,7 @@
       $result = $statement->execute(array(
         ':nombre' => $datos["nombre"],
         ':email' => $datos["email"],
-        ':clave' => $datos["clave"],
+        ':clave' => password_hash($datos["clave"], PASSWORD_DEFAULT),
         ':cedula' => $datos["cedula"],
         ':direccion' => $datos["direccion"],
         ':telefono' => $datos["telefono"],

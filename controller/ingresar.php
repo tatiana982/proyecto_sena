@@ -23,18 +23,21 @@
 
       $db = database::conectar();
 
-      $statement = $db->prepare("SELECT * FROM usuarios WHERE email = :email AND clave = :clave");
+      $statement = $db->prepare("SELECT * FROM usuarios WHERE email = :email");
       $statement->execute(array(
-        ':email' => $datos["correo"],
-        ':clave' => $datos["clave"],
+        ':email' => $datos["correo"]
       ));
 
       $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-      /* var_dump($rows[0]["rol"]);
-      die(); */
-
       if (count($rows) == 0) {
+        $_SESSION['active'] = 0;
+
+        header("Location: ../views/ingresar.php?mensaje_error=Las credenciales son incorrectas");
+        die();
+      }
+
+      if (!password_verify($datos["clave"], $rows[0]["clave"])) {
         $_SESSION['active'] = 0;
 
         header("Location: ../views/ingresar.php?mensaje_error=Las credenciales son incorrectas");
