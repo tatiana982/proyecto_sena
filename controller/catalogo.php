@@ -14,6 +14,16 @@
 
   <?php
 
+  function getRandomBytes($length = 16)
+  {
+    if (function_exists('random_bytes')) {
+      $bytes = random_bytes($length / 2);
+    } else {
+      $bytes = openssl_random_pseudo_bytes($length / 2);
+    }
+    return bin2hex($bytes);
+  }
+
   require_once "../conexion/conn.php";
 
   if (!isset($_POST["nombre"]) && !isset($_FILES["imagen"])) {
@@ -24,7 +34,7 @@
   if (isset($_POST["nombre"]) && isset($_FILES["imagen"])) {
 
     $target_dir = "../uploads/";
-    $target_file = $target_dir . basename($_FILES["imagen"]["name"]);
+    $target_file = $target_dir . base64_encode(openssl_random_pseudo_bytes(30));
     $uploadOk = 1;
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
@@ -54,10 +64,11 @@
 
         $db = database::conectar();
 
-        $statement = $db->prepare("INSERT INTO catalogo(nombre, imagen) VALUES(:nombre, :imagen)");
+        $statement = $db->prepare("INSERT INTO catalogo(nombre, imagen,usuarios_id) VALUES(:nombre, :imagen,:usuario_id)");
         $result = $statement->execute(array(
           ':nombre' => $_POST["nombre"],
           ':imagen' => $target_file,
+          ":usuario_id" => $_SESSION["id"]
         ));
 
         if (!$result) {
@@ -73,4 +84,4 @@
       }
     }
   }
- ?>
+  ?>

@@ -45,9 +45,10 @@
       }
 
       $rol = $rows[0]["rol"];
-
+      $id = $rows[0]["id"];
       $_SESSION['active'] = 1;
       $_SESSION['rol'] = $rol;
+      $_SESSION['id'] = $id;
 
       header("Location: ../views/" . $rol . ".php");
       die();
